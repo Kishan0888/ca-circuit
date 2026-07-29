@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Development mode - allow all reads and writes
+    // WARNING: This should be changed to restrictive rules before production
+    allow read, write: if true;
+  }
+}
+
+// Also add storage rules for development
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Development mode - allow all reads and writes
+    // WARNING: This should be changed to restrictive rules before production
+    allow read, write: if true;
+  }
+}
