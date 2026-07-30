@@ -1,17 +1,120 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Development mode - allow all reads and writes
-    // WARNING: This should be changed to restrictive rules before production
-    allow read, write: if true;
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Looks up the caller's own user document to check their role.
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ---------------- Users ----------------
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      // Users may create/update their own profile, but never their own role,
+      // verification status, or suspension flag — only an admin can change those.
+      allow create: if isOwner(userId) &&
+        request.resource.data.role in ['registered', 'ca'] &&
+        request.resource.data.isVerified == false;
+      allow update: if isAdmin() ||
+        (isOwner(userId) &&
+          request.resource.data.role == resource.data.role &&
+          request.resource.data.isVerified == resource.data.isVerified &&
+          (!('isSuspended' in request.resource.data) || request.resource.data.isSuspended == resource.data.isSuspended));
+      allow delete: if isAdmin();
+    }
+
+    // ---------------- Opportunities ----------------
+    match /opportunities/{opportunityId} {
+      allow read: if resource.data.status == 'published' || isAdmin() ||
+        (isSignedIn() && resource.data.postedBy == request.auth.uid);
+      allow create: if isSignedIn() &&
+        request.resource.data.postedBy == request.auth.uid &&
+        request.resource.data.status == 'pending';
+      // Owners may edit their own opportunity's content, but not re-approve/feature it themselves.
+      allow update: if isAdmin() ||
+        (isSignedIn() && resource.data.postedBy == request.auth.uid &&
+          request.resource.data.status == resource.data.status &&
+          request.resource.data.isFeatured == resource.data.isFeatured);
+      allow delete: if isAdmin() ||
+        (isSignedIn() && resource.data.postedBy == request.auth.uid);
+    }
+
+    // ---------------- Bookmarks ----------------
+    match /bookmarks/{bookmarkId} {
+      allow read, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if false;
+    }
+
+    // ---------------- Interests ----------------
+    match /interests/{interestId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+    }
+
+    // ---------------- Notifications ----------------
+    match /notifications/{notificationId} {
+      allow read, update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() || isAdmin();
+    }
+
+    // ---------------- Contact Messages ----------------
+    match /contactMessages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ---------------- Testimonials / FAQs / Homepage Settings ----------------
+    match /testimonials/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /faqs/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /homepageSettings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------------- Analytics snapshots ----------------
+    match /analytics/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ---------------- Audit Logs (immutable trail of admin actions) ----------------
+    match /auditLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false;
+    }
   }
 }
 
-// Also add storage rules for development
 service firebase.storage {
   match /b/{bucket}/o {
-    // Development mode - allow all reads and writes
-    // WARNING: This should be changed to restrictive rules before production
-    allow read, write: if true;
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
   }
 }
