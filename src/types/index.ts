@@ -25,6 +25,7 @@ export interface User {
   membershipType?: 'free' | 'premium' | 'enterprise';
   membershipExpiry?: Date;
   isVerified: boolean;
+  isSuspended?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -193,6 +194,53 @@ export interface Analytics {
   totalBookmarks: number;
   newUsers: number;
   newOpportunities: number;
+}
+
+// Admin: Audit Log Interface
+export type AuditAction =
+  | 'opportunity_approved'
+  | 'opportunity_rejected'
+  | 'opportunity_created'
+  | 'opportunity_updated'
+  | 'opportunity_deleted'
+  | 'opportunity_featured'
+  | 'opportunity_unfeatured'
+  | 'user_role_changed'
+  | 'user_suspended'
+  | 'user_reactivated';
+
+export interface AuditLog {
+  id: string;
+  action: AuditAction;
+  targetType: 'opportunity' | 'user';
+  targetId: string;
+  targetLabel: string;
+  adminId: string;
+  adminName: string;
+  details?: string;
+  createdAt: Date;
+}
+
+// Admin: Dashboard Overview Stats
+export interface AdminOverviewStats {
+  totalUsers: number;
+  totalCAs: number;
+  newUsersLast7Days: number;
+  totalOpportunities: number;
+  pendingOpportunities: number;
+  publishedOpportunities: number;
+  rejectedOpportunities: number;
+  draftOpportunities: number;
+  archivedOpportunities: number;
+  totalViews: number;
+  totalInterests: number;
+  totalBookmarks: number;
+}
+
+// Admin: Trend point for charts
+export interface TrendPoint {
+  label: string;
+  value: number;
 }
 
 // Filter Options Interface
