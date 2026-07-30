@@ -185,6 +185,14 @@ export const NAV_LINKS = [
   { href: '/contact', label: 'Contact' },
 ] as const;
 
+// Admin Panel Navigation
+export const ADMIN_NAV_LINKS = [
+  { href: '/admin', label: 'Dashboard', icon: 'LayoutDashboard' },
+  { href: '/admin/opportunities', label: 'Opportunities', icon: 'Briefcase' },
+  { href: '/admin/users', label: 'Users', icon: 'Users' },
+  { href: '/admin/analytics', label: 'Analytics', icon: 'BarChart3' },
+] as const;
+
 // Social Links
 export const SOCIAL_LINKS = {
   linkedin: 'https://linkedin.com',
