@@ -1,348 +1,224 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Users, Briefcase, Clock, CheckCircle, XCircle, TrendingUp, Eye, Settings, LogOut } from 'lucide-react';
+import {
+  Users,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Eye,
+  Heart,
+  ArrowRight,
+  History,
+} from 'lucide-react';
+import { AdminHeader } from '@/components/admin/AdminHeader';
+import { StatCard } from '@/components/admin/StatCard';
+import { EmptyState } from '@/components/admin/EmptyState';
+import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { opportunityService } from '@/services/opportunity.service';
-import { Opportunity } from '@/types';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { adminService } from '@/services/admin.service';
+import { analyticsService } from '@/services/analytics.service';
+import { Opportunity, AdminOverviewStats, AuditLog } from '@/types';
 
-function AdminDashboardContent() {
-  const { user, userData } = useAuth();
-  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    totalOpportunities: 0,
-    pendingOpportunities: 0,
-    publishedOpportunities: 0,
-    rejectedOpportunities: 0,
-    totalViews: 0,
-  });
-
-  if (!userData) return null;
-
-  useEffect(() => {
-    const fetchOpportunities = async () => {
-      const data = await opportunityService.getOpportunitiesByStatus('pending');
-      const published = await opportunityService.getOpportunitiesByStatus('published');
-      const rejected = await opportunityService.getOpportunitiesByStatus('rejected');
-      setOpportunities([...data, ...published, ...rejected]);
-      
-      setStats({
-        totalUsers: 0,
-        totalOpportunities: data.length + published.length + rejected.length,
-        pendingOpportunities: data.length,
-        publishedOpportunities: published.length,
-        rejectedOpportunities: rejected.length,
-        totalViews: [...data, ...published, ...rejected].reduce((sum, o) => sum + o.viewCount, 0),
-      });
-    };
-
-    if (user) {
-      fetchOpportunities();
-    }
-  }, [user]);
-
-  const handleApprove = async (opportunityId: string) => {
-    await opportunityService.approveOpportunity(opportunityId);
-    const updated = opportunities.map(o => o.id === opportunityId ? { ...o, status: 'published' as const } : o);
-    setOpportunities(updated);
-  };
-
-  const handleReject = async (opportunityId: string) => {
-    await opportunityService.rejectOpportunity(opportunityId, 'Rejected by admin');
-    const updated = opportunities.map(o => o.id === opportunityId ? { ...o, status: 'rejected' as const } : o);
-    setOpportunities(updated);
-  };
-
-  const handleFeature = async (opportunityId: string) => {
-    await opportunityService.updateOpportunity(opportunityId, { isFeatured: true });
-    const updated = opportunities.map(o => o.id === opportunityId ? { ...o, isFeatured: !o.isFeatured } : o);
-    setOpportunities(updated);
-  };
-
-  const pendingOpportunities = opportunities.filter(o => o.status === 'pending');
-  const publishedOpportunities = opportunities.filter(o => o.status === 'published');
-  const rejectedOpportunities = opportunities.filter(o => o.status === 'rejected');
-
-  return (
-    <div className="min-h-screen bg-background pt-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-heading text-4xl font-bold text-heading mb-2">Admin Dashboard</h1>
-              <p className="text-muted-foreground">Manage platform content and users</p>
-            </div>
-            <Button variant="outline">
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
-        >
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Opportunities</CardTitle>
-              <Briefcase className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalOpportunities}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending Approval</CardTitle>
-              <Clock className="h-4 w-4 text-yellow-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.pendingOpportunities}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Published</CardTitle>
-              <CheckCircle className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.publishedOpportunities}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Views</CardTitle>
-              <Eye className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalViews}</div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Tabs defaultValue="pending" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="pending">Pending ({pendingOpportunities.length})</TabsTrigger>
-              <TabsTrigger value="published">Published ({publishedOpportunities.length})</TabsTrigger>
-              <TabsTrigger value="rejected">Rejected ({rejectedOpportunities.length})</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            </TabsList>
-
-            {/* Pending Tab */}
-            <TabsContent value="pending">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Pending Opportunities</CardTitle>
-                  <CardDescription>Opportunities awaiting admin approval</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {pendingOpportunities.length === 0 ? (
-                    <div className="text-center py-12">
-                      <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">No pending opportunities</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {pendingOpportunities.map((opp) => (
-                        <div key={opp.id} className="p-4 border rounded-lg space-y-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <h3 className="font-semibold">{opp.title}</h3>
-                              <p className="text-sm text-muted-foreground">{opp.category} • {opp.city}, {opp.state}</p>
-                              <p className="text-sm text-muted-foreground mt-2">Posted by: {opp.postedByName}</p>
-                            </div>
-                            <Badge variant="secondary">{opp.status}</Badge>
-                          </div>
-                          <p className="text-sm text-muted-foreground line-clamp-2">{opp.shortDescription}</p>
-                          <div className="flex gap-2">
-                            <Link href={`/opportunities/${opp.id}`}>
-                              <Button variant="outline" size="sm">View Details</Button>
-                            </Link>
-                            <Button
-                              size="sm"
-                              className="bg-green-600 hover:bg-green-700 text-white"
-                              onClick={() => handleApprove(opp.id)}
-                            >
-                              <CheckCircle className="h-4 w-4 mr-1" />
-                              Approve
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => handleReject(opp.id)}
-                            >
-                              <XCircle className="h-4 w-4 mr-1" />
-                              Reject
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Published Tab */}
-            <TabsContent value="published">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Published Opportunities</CardTitle>
-                  <CardDescription>Live opportunities on the platform</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {publishedOpportunities.length === 0 ? (
-                    <div className="text-center py-12">
-                      <Briefcase className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">No published opportunities</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {publishedOpportunities.map((opp) => (
-                        <div key={opp.id} className="flex items-center justify-between p-4 border rounded-lg">
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium">{opp.title}</p>
-                            <p className="text-sm text-muted-foreground">{opp.category} • {opp.city}</p>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <div className="text-right">
-                              <p className="text-sm font-medium">{opp.viewCount} views</p>
-                              <p className="text-xs text-muted-foreground">{opp.interestedCount} interested</p>
-                            </div>
-                            <Button
-                              variant={opp.isFeatured ? 'default' : 'outline'}
-                              size="sm"
-                              onClick={() => handleFeature(opp.id)}
-                            >
-                              {opp.isFeatured ? 'Featured' : 'Feature'}
-                            </Button>
-                            <Link href={`/opportunities/${opp.id}`}>
-                              <Button variant="outline" size="sm">View</Button>
-                            </Link>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Rejected Tab */}
-            <TabsContent value="rejected">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Rejected Opportunities</CardTitle>
-                  <CardDescription>Opportunities that were not approved</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {rejectedOpportunities.length === 0 ? (
-                    <div className="text-center py-12">
-                      <XCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">No rejected opportunities</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {rejectedOpportunities.map((opp) => (
-                        <div key={opp.id} className="flex items-center justify-between p-4 border rounded-lg">
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium">{opp.title}</p>
-                            <p className="text-sm text-muted-foreground">{opp.category} • {opp.city}</p>
-                          </div>
-                          <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              className="bg-green-600 hover:bg-green-700 text-white"
-                              onClick={() => handleApprove(opp.id)}
-                            >
-                              Approve
-                            </Button>
-                            <Link href={`/opportunities/${opp.id}`}>
-                              <Button variant="outline" size="sm">View</Button>
-                            </Link>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Analytics Tab */}
-            <TabsContent value="analytics">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Platform Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Total Users</span>
-                      <span className="font-semibold">{stats.totalUsers}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Total Opportunities</span>
-                      <span className="font-semibold">{stats.totalOpportunities}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Total Views</span>
-                      <span className="font-semibold">{stats.totalViews}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Approval Rate</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-bold text-center py-8">
-                      {stats.totalOpportunities > 0 
-                        ? Math.round((stats.publishedOpportunities / stats.totalOpportunities) * 100)
-                        : 0}%
-                    </div>
-                    <p className="text-center text-sm text-muted-foreground">
-                      {stats.publishedOpportunities} of {stats.totalOpportunities} approved
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </motion.div>
-      </div>
-    </div>
-  );
-}
+const AUDIT_LABELS: Record<string, string> = {
+  opportunity_approved: 'approved',
+  opportunity_rejected: 'rejected',
+  opportunity_created: 'created',
+  opportunity_updated: 'updated',
+  opportunity_deleted: 'deleted',
+  opportunity_featured: 'featured',
+  opportunity_unfeatured: 'unfeatured',
+  user_role_changed: "changed a user's role for",
+  user_suspended: 'suspended',
+  user_reactivated: 'reactivated',
+};
 
 export default function AdminDashboardPage() {
+  const { userData } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<AdminOverviewStats | null>(null);
+  const [pending, setPending] = useState<Opportunity[]>([]);
+  const [logs, setLogs] = useState<AuditLog[]>([]);
+  const [actionTarget, setActionTarget] = useState<{ opp: Opportunity; type: 'approve' | 'reject' } | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    const [{ users, opportunities }, pendingOpps, recentLogs] = await Promise.all([
+      analyticsService.getRawData(),
+      opportunityService.getOpportunitiesByStatus('pending'),
+      adminService.getRecentAuditLogs(8),
+    ]);
+    setStats(analyticsService.computeOverviewStats(users, opportunities));
+    setPending(pendingOpps.slice(0, 5));
+    setLogs(recentLogs);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const runAction = async (reason?: string) => {
+    if (!actionTarget || !userData) return;
+    setActionLoading(true);
+    const { opp, type } = actionTarget;
+
+    if (type === 'approve') {
+      await opportunityService.approveOpportunity(opp.id);
+      await adminService.logAction({
+        action: 'opportunity_approved',
+        targetType: 'opportunity',
+        targetId: opp.id,
+        targetLabel: opp.title,
+        adminId: userData.id,
+        adminName: userData.name,
+      });
+    } else {
+      await opportunityService.rejectOpportunity(opp.id, reason || 'Rejected by admin');
+      await adminService.logAction({
+        action: 'opportunity_rejected',
+        targetType: 'opportunity',
+        targetId: opp.id,
+        targetLabel: opp.title,
+        adminId: userData.id,
+        adminName: userData.name,
+        details: reason,
+      });
+    }
+
+    setActionLoading(false);
+    setActionTarget(null);
+    setPending(prev => prev.filter(o => o.id !== opp.id));
+    loadData();
+  };
+
   return (
-    <ProtectedRoute allowedRoles={['admin']}>
-      <AdminDashboardContent />
-    </ProtectedRoute>
+    <div>
+      <AdminHeader title="Dashboard" description="Platform overview and quick actions" />
+
+      <div className="p-4 sm:p-6 space-y-6">
+        {/* Stat cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard title="Total Users" value={loading ? '—' : stats?.totalUsers ?? 0} icon={Users} />
+          <StatCard
+            title="Pending Approval"
+            value={loading ? '—' : stats?.pendingOpportunities ?? 0}
+            icon={Clock}
+            iconClassName="text-yellow-600"
+          />
+          <StatCard
+            title="Published"
+            value={loading ? '—' : stats?.publishedOpportunities ?? 0}
+            icon={CheckCircle}
+            iconClassName="text-green-600"
+          />
+          <StatCard title="Total Views" value={loading ? '—' : stats?.totalViews ?? 0} icon={Eye} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Pending approval queue */}
+          <Card className="lg:col-span-2">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Awaiting Approval</CardTitle>
+                <CardDescription>Newest opportunities that need a decision</CardDescription>
+              </div>
+              <Link href="/admin/opportunities?status=pending">
+                <Button variant="outline" size="sm">
+                  View all
+                  <ArrowRight className="h-4 w-4 ml-1" />
+                </Button>
+              </Link>
+            </CardHeader>
+            <CardContent>
+              {!loading && pending.length === 0 ? (
+                <EmptyState icon={Clock} title="Nothing pending" description="All caught up — no opportunities waiting for review." />
+              ) : (
+                <div className="space-y-3">
+                  {pending.map((opp) => (
+                    <div key={opp.id} className="flex items-start justify-between gap-4 p-3 rounded-lg border border-border">
+                      <div className="min-w-0">
+                        <p className="font-medium text-sm truncate">{opp.title}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {opp.category} • {opp.city}, {opp.state} • by {opp.postedByName}
+                        </p>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                          onClick={() => setActionTarget({ opp, type: 'approve' })}
+                        >
+                          <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                          Approve
+                        </Button>
+                        <Button size="sm" variant="destructive" onClick={() => setActionTarget({ opp, type: 'reject' })}>
+                          <XCircle className="h-3.5 w-3.5 mr-1" />
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Recent activity */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <History className="h-4 w-4" />
+                Recent Activity
+              </CardTitle>
+              <CardDescription>Latest admin actions</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {!loading && logs.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No admin activity yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {logs.map((log) => (
+                    <div key={log.id} className="text-sm">
+                      <p>
+                        <span className="font-medium">{log.adminName}</span>{' '}
+                        {AUDIT_LABELS[log.action] || log.action}{' '}
+                        <span className="font-medium">{log.targetLabel}</span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Secondary stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard title="Chartered Accountants" value={loading ? '—' : stats?.totalCAs ?? 0} icon={Users} />
+          <StatCard title="New Users (7d)" value={loading ? '—' : stats?.newUsersLast7Days ?? 0} icon={Users} />
+          <StatCard title="Rejected" value={loading ? '—' : stats?.rejectedOpportunities ?? 0} icon={XCircle} />
+          <StatCard title="Interests Expressed" value={loading ? '—' : stats?.totalInterests ?? 0} icon={Heart} />
+        </div>
+      </div>
+
+      <ConfirmDialog
+        open={!!actionTarget}
+        onOpenChange={(open) => !open && setActionTarget(null)}
+        title={actionTarget?.type === 'approve' ? 'Approve this opportunity?' : 'Reject this opportunity?'}
+        description={actionTarget?.opp.title}
+        confirmLabel={actionTarget?.type === 'approve' ? 'Approve' : 'Reject'}
+        destructive={actionTarget?.type === 'reject'}
+        requireReason={actionTarget?.type === 'reject'}
+        reasonLabel="Rejection reason"
+        loading={actionLoading}
+        onConfirm={runAction}
+      />
+    </div>
   );
 }
