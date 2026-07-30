@@ -2,7 +2,22 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, TrendingUp, Users, Briefcase, CheckCircle, Star, Handshake, Store, Lightbulb, FileCheck } from 'lucide-react';
+import {
+  IndianRupee,
+  ArrowRight,
+  TrendingUp,
+  Users,
+  Briefcase,
+  CheckCircle,
+  Star,
+  Handshake,
+  Store,
+  Lightbulb,
+  FileCheck,
+  BriefcaseBusiness,
+  Landmark,
+  Building2,
+} from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,13 +26,82 @@ import { useOpportunities } from '@/hooks/useOpportunities';
 
 export default function Home() {
   const { opportunities: latestOpportunities, loading } = useOpportunities();
+  const features = [
+  {
+    icon: BriefcaseBusiness,
+    title: "Business Opportunities",
+    description:
+      "Discover verified business buying, selling and investment opportunities from across India.",
+  },
+  {
+    icon: Handshake,
+    title: "Referral Collaboration",
+    description:
+      "Partner with trusted Chartered Accountants and collaborate on client referrals.",
+  },
+  {
+    icon: Landmark,
+    title: "Fund Raising",
+    description:
+      "Connect businesses with investors, lenders and financial institutions.",
+  },
+  {
+    icon: Building2,
+    title: "M&A Advisory",
+    description:
+      "Support mergers, acquisitions and strategic business transactions.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Practice Growth",
+    description:
+      "Expand your CA practice through quality referrals and long-term partnerships.",
+  },
+  {
+    icon: Users,
+    title: "Nationwide Network",
+    description:
+      "Build meaningful connections with Chartered Accountants across India.",
+  },
+];
+
+const earningSteps = [
+  {
+    icon: BriefcaseBusiness,
+    title: "Post an Opportunity",
+    description:
+      "Share a business requirement, investment proposal or client opportunity with verified Chartered Accountants.",
+  },
+  {
+    icon: Handshake,
+    title: "Connect with the Right CA",
+    description:
+      "Find experienced professionals across India who match your expertise and business needs.",
+  },
+  {
+    icon: FileCheck,
+    title: "Close the Deal",
+    description:
+      "Work together professionally, complete the transaction and build long-term business relationships.",
+  },
+  {
+    icon: IndianRupee,
+    title: "Earn Success Fee",
+    description:
+      "Generate professional income through successful collaborations, referrals and advisory engagements.",
+  },
+];
 
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<section className="relative overflow-hidden bg-[radial-gradient(circle_at_top,#f8f3e8_0%,#ffffff_45%,#f8fafc_100%)] py-28 md:py-36">
+  {/* Gold Glow */}
+  <div className="absolute -top-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-gold/10 blur-[140px]" />
+  <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-primary/10 blur-[120px]" />
+       
+   <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -28,9 +112,19 @@ export default function Home() {
             <h1 className="font-heading text-5xl md:text-7xl font-bold text-heading mb-6 leading-tight">
               Connect • Collaborate • <span className="text-gold">Create Value</span>
             </h1>
-            <p className="text-xl md:text-2xl text-foreground mb-8 max-w-2xl mx-auto">
-              The professional networking platform exclusively built for Chartered Accountants to share business opportunities and grow together.
-            </p>
+            <div className="mb-8 max-w-3xl mx-auto text-center">
+  <p className="text-lg md:text-xl text-foreground/80">
+  The professional networking platform exclusively built for
+</p>
+
+<h2 className="mt-2 mb-2 font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-gold">
+  Chartered Accountants
+</h2>
+
+<p className="text-lg md:text-xl text-foreground/80">
+  to share business opportunities and grow together.
+</p>
+</div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/opportunities">
                 <Button size="lg" className="bg-gold hover:bg-gold/90 text-white text-lg px-8">
@@ -40,7 +134,7 @@ export default function Home() {
               </Link>
               <Link href="/register">
                 <Button size="lg" variant="outline" className="text-lg px-8 border-primary text-primary hover:bg-primary hover:text-white">
-                  Join Free Today
+                  Join The Network Today
                 </Button>
               </Link>
             </div>
@@ -72,6 +166,70 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      {/* What the Network Does */}
+<section className="py-24 bg-background">
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="text-center mb-16"
+    >
+      <h2 className="font-heading text-4xl md:text-5xl font-bold text-heading">
+        What the <span className="text-gold">Network Does</span>
+      </h2>
+
+      <p className="mt-5 max-w-3xl mx-auto text-lg text-muted-foreground">
+        CA Connect empowers Chartered Accountants to collaborate, share opportunities,
+        expand their professional network and create new revenue streams through
+        trusted partnerships across India.
+      </p>
+    </motion.div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      {features.map((feature, index) => {
+        const Icon = feature.icon;
+
+        return (
+          <motion.div
+            key={feature.title}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}
+          >
+            <Card className="h-full rounded-2xl border hover:border-gold transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+
+              <CardContent className="p-8">
+
+                <div className="w-14 h-14 rounded-xl bg-gold/10 flex items-center justify-center mb-6">
+
+                  <Icon className="w-7 h-7 text-gold" />
+
+                </div>
+
+                <h3 className="text-2xl font-semibold text-heading mb-3">
+                  {feature.title}
+                </h3>
+
+                <p className="text-muted-foreground leading-7">
+                  {feature.description}
+                </p>
+
+              </CardContent>
+
+            </Card>
+          </motion.div>
+        );
+
+      })}
+
+    </div>
+
+  </div>
+</section>
 
       {/* Categories Section */}
       <section className="py-20 bg-background">
@@ -118,6 +276,155 @@ export default function Home() {
         </div>
       </section>
 
+{/* How You Earn */}
+
+<section className="py-24 bg-white">
+
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="text-center mb-20"
+    >
+
+      <Badge className="mb-4 bg-gold/10 text-gold border border-gold/20">
+        PROFESSIONAL GROWTH
+      </Badge>
+
+      <h2 className="font-heading text-4xl md:text-5xl font-bold text-heading">
+
+        How You <span className="text-gold">Earn</span>
+
+      </h2>
+
+      <p className="mt-5 max-w-3xl mx-auto text-lg text-muted-foreground leading-8">
+
+        CA Connect helps you transform professional connections into real
+        business opportunities. Collaborate with verified Chartered
+        Accountants, close deals, and grow your practice through trusted
+        partnerships.
+
+      </p>
+
+    </motion.div>
+
+    <div className="relative">
+
+      <div className="hidden lg:block absolute top-10 left-0 right-0 h-1 bg-gradient-to-r from-gold/20 via-gold to-gold/20 rounded-full" />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+        {earningSteps.map((step, index) => {
+
+          const Icon = step.icon;
+
+          return (
+
+            <motion.div
+              key={step.title}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.15 }}
+            >
+
+              <Card className="relative h-full rounded-3xl border border-slate-200 hover:border-gold hover:shadow-2xl hover:-translate-y-3 transition-all duration-300">
+
+                <CardContent className="p-8 flex flex-col h-full">
+
+                  <div className="relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-6 shadow-md">
+
+                    <Icon className="w-8 h-8 text-gold" />
+
+                  </div>
+
+                  <div className="absolute top-6 right-6 w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center font-bold">
+
+                    {index + 1}
+
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-heading mb-4">
+
+                    {step.title}
+
+                  </h3>
+
+                  <p className="text-muted-foreground leading-7 flex-grow">
+
+                    {step.description}
+
+                  </p>
+
+                  <div className="mt-8 flex items-center text-gold font-semibold">
+
+                    Learn More
+
+                    <ArrowRight className="ml-2 w-4 h-4" />
+
+                  </div>
+
+                </CardContent>
+
+              </Card>
+
+            </motion.div>
+
+          );
+
+        })}
+
+      </div>
+
+    </div>
+
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="mt-20"
+    >
+
+      <div className="rounded-3xl bg-gradient-to-r from-primary to-[#0f274f] text-white p-10 text-center shadow-2xl">
+
+        <h3 className="text-3xl font-heading font-bold mb-4">
+
+          Every Connection Can Become Your Next Client
+
+        </h3>
+
+        <p className="text-white/80 max-w-3xl mx-auto mb-8">
+
+          Build trusted partnerships, discover high-value business opportunities,
+          and earn through referrals, advisory services and successful
+          collaborations.
+
+        </p>
+
+        <Link href="/opportunities">
+
+          <Button
+            size="lg"
+            className="bg-gold hover:bg-[#b8860b] text-white rounded-full px-8"
+          >
+
+            Explore Opportunities
+
+            <ArrowRight className="ml-2 h-5 w-5" />
+
+          </Button>
+
+        </Link>
+
+      </div>
+
+    </motion.div>
+
+  </div>
+
+</section>
       {/* Latest Opportunities */}
       <section className="py-20 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -196,7 +503,7 @@ export default function Home() {
             {[
               {
                 icon: Users,
-                title: 'Create Account',
+                title: 'Create Profile',
                 description: 'Register as a CA or professional to access the platform',
               },
               {

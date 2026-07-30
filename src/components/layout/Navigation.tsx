@@ -46,25 +46,28 @@ export function Navigation() {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-background/80 backdrop-blur-lg border-b border-border shadow-sm' : 'bg-background'
-      }`}
-    >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+  initial={{ y: -100 }}
+  animate={{ y: 0 }}
+  className="fixed top-5 left-0 right-0 z-50 px-4"
+>
+<div className="max-w-7xl mx-auto">
+<div
+  className={`flex items-center justify-between h-20 px-8 rounded-full transition-all duration-300 ${
+    isScrolled
+      ? "bg-white/80 backdrop-blur-xl border border-slate-200 shadow-xl"
+      : "bg-white/70 backdrop-blur-lg border border-slate-100 shadow-lg"
+  }`}
+>          {/* Logo */}
           
             <Link href="/" className="flex items-center">
   <Image
-    src="/logo.png"
-    alt="CA Connect"
-    width={220}
-    height={55}
-    priority
-    className="h-11 w-auto"
-  />
+  src="/logo.png"
+  alt="CA Connect"
+  width={280}
+  height={70}
+  priority
+  className="h-14 w-auto transition-all duration-300"
+/>
 </Link>
 
           {/* Desktop Navigation */}
@@ -73,9 +76,11 @@ export function Navigation() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === link.href ? 'text-primary' : 'text-foreground'
-                }`}
+                className={`relative text-sm font-semibold transition-all duration-300 hover:text-gold ${
+  pathname === link.href
+    ? "text-gold"
+    : "text-slate-700"
+}`}
               >
                 {link.label}
               </Link>
@@ -86,7 +91,11 @@ export function Navigation() {
           <div className="flex items-center space-x-4">
             {/* Search */}
             <Link href="/opportunities">
-              <Button variant="ghost" size="icon" className="hidden sm:flex">
+              <Button
+  variant="ghost"
+  size="icon"
+  className="hidden sm:flex rounded-full hover:bg-gold/10"
+>
                 <Search className="h-5 w-5" />
               </Button>
             </Link>
@@ -154,7 +163,7 @@ export function Navigation() {
                   <Button variant="ghost">Login</Button>
                 </Link>
                 <Link href="/register">
-                  <Button className="bg-gold hover:bg-gold/90 text-white">Join Now</Button>
+                  <Button className="rounded-full bg-gold hover:bg-[#b8860b] text-white px-6 shadow-lg hover:shadow-xl transition-all duration-300">Join Now</Button>
                 </Link>
               </div>
             )}

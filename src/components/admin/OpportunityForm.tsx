@@ -103,7 +103,7 @@ export function OpportunityForm({ existing }: OpportunityFormProps) {
     try {
       let uploadedUrls: string[] = [];
       if (newImages.length > 0) {
-        uploadedUrls = await storageService.uploadImages(newImages, `opportunities/${existing?.id || 'new'}`);
+        uploadedUrls = await storageService.uploadImages(newImages);
       }
       const allImages = [...existingImages, ...uploadedUrls];
 

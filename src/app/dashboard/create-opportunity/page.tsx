@@ -118,7 +118,7 @@ export default function CreateOpportunityPage() {
       // Upload images
       const imageUrls = [];
       for (const image of formData.images) {
-        const url = await storageService.uploadImage(image, `opportunities/${user?.uid}`);
+        const url = await storageService.uploadImage(image);
         if (url) {
           imageUrls.push(url);
         }
@@ -127,7 +127,7 @@ export default function CreateOpportunityPage() {
       // Upload documents
       const documentUrls = [];
       for (const document of formData.documents) {
-        const url = await storageService.uploadDocument(document, `opportunities/${user?.uid}`);
+        const url = await storageService.uploadDocument(document);
         if (url) {
           documentUrls.push(url);
         }
