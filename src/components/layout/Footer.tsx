@@ -1,5 +1,5 @@
 'use client';
-
+import Image from "next/image";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -19,14 +19,17 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gold rounded-lg flex items-center justify-center">
-                <span className="text-white font-heading font-bold text-xl">CA</span>
-              </div>
-              <span className="font-heading font-bold text-xl">THE CA CIRCUIT</span>
-            </div>
+            <Link href="/" className="inline-block">
+  <Image
+    src="/logo.png"
+    alt="CA Connect"
+    width={220}
+    height={55}
+    className="h-11 w-auto"
+  />
+</Link>
             <p className="text-sm text-gray-300">
-              India&apos;s first professional networking platform exclusively built for Chartered Accountants.
+  India&apos;s professional networking platform built for Chartered Accountants to connect, collaborate, and discover business opportunities.
             </p>
             <div className="flex space-x-4">
               <Link href={SOCIAL_LINKS.linkedin} className="text-gray-300 hover:text-gold transition-colors">

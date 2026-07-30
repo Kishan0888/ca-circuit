@@ -180,7 +180,6 @@ export const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/how-it-works', label: 'How It Works' },
   { href: '/opportunities', label: 'Opportunity Feed' },
-  { href: '/membership', label: 'Membership' },
   { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Contact' },
 ] as const;
