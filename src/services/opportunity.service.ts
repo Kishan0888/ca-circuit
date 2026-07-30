@@ -92,7 +92,7 @@ export const opportunityService = {
     try {
       const docSnap = await getDoc(doc(db, 'opportunities', id));
       if (docSnap.exists()) {
-        return docSnap.data() as Opportunity;
+        return { id: docSnap.id, ...docSnap.data() } as Opportunity;
       }
       return null;
     } catch (error) {
@@ -108,7 +108,8 @@ export const opportunityService = {
       const querySnapshot = await getDocs(q);
       
       if (!querySnapshot.empty) {
-        return querySnapshot.docs[0].data() as Opportunity;
+        const first = querySnapshot.docs[0];
+        return { id: first.id, ...first.data() } as Opportunity;
       }
       return null;
     } catch (error) {
@@ -130,7 +131,7 @@ export const opportunityService = {
 
       const querySnapshot = await getDocs(q);
       const sorted = sortByCreatedAtDesc(
-        querySnapshot.docs.map(doc => doc.data() as Opportunity)
+        querySnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Opportunity))
       );
       const opportunities = sorted.slice(0, limitCount);
       const newLastDoc = querySnapshot.docs[querySnapshot.docs.length - 1] || null;
@@ -153,7 +154,7 @@ export const opportunityService = {
       const querySnapshot = await getDocs(q);
       return sortByCreatedAtDesc(
         querySnapshot.docs
-          .map(doc => doc.data() as Opportunity)
+          .map(d => ({ id: d.id, ...d.data() } as Opportunity))
           .filter(opp => opp.isFeatured)
       ).slice(0, limitCount);
     } catch (error) {
@@ -172,10 +173,23 @@ export const opportunityService = {
 
       const querySnapshot = await getDocs(q);
       return sortByCreatedAtDesc(
-        querySnapshot.docs.map(doc => doc.data() as Opportunity)
+        querySnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Opportunity))
       );
     } catch (error) {
       console.error('Error fetching user opportunities:', error);
+      return [];
+    }
+  },
+
+  // Get ALL opportunities regardless of status (for admin management)
+  async getAllOpportunities(): Promise<Opportunity[]> {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'opportunities'));
+      return sortByCreatedAtDesc(
+        querySnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Opportunity))
+      );
+    } catch (error) {
+      console.error('Error fetching all opportunities:', error);
       return [];
     }
   },
@@ -190,7 +204,7 @@ export const opportunityService = {
 
       const querySnapshot = await getDocs(q);
       return sortByCreatedAtDesc(
-        querySnapshot.docs.map(doc => doc.data() as Opportunity)
+        querySnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Opportunity))
       );
     } catch (error) {
       console.error('Error fetching opportunities by status:', error);
@@ -207,7 +221,7 @@ export const opportunityService = {
       );
 
       const querySnapshot = await getDocs(q);
-      let opportunities = querySnapshot.docs.map(doc => doc.data() as Opportunity);
+      let opportunities = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Opportunity));
 
       // Apply filters client-side to avoid composite index requirements
       if (searchQuery.filters.category) {
