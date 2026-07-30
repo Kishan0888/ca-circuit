@@ -18,11 +18,15 @@ import {
 import { db } from '@/lib/firebase';
 import { sortByCreatedAtDesc, sortByFieldAsc, sortByFieldDesc } from '@/lib/firestore-utils';
 import { Opportunity, OpportunityStatus, CreateOpportunityForm, FilterOptions, SearchQuery } from '@/types';
+import { INVESTMENT_RANGES } from '@/constants';
 
 export const opportunityService = {
   // Create new opportunity
   async createOpportunity(data: CreateOpportunityForm, userId: string, userName: string, userImage?: string) {
     try {
+      const selectedRange = INVESTMENT_RANGES.find(
+  (range) => range.value === data.investmentRange
+);
       const opportunityData: Partial<Opportunity> = {
         title: data.title,
         slug: this.generateSlug(data.title),
@@ -31,8 +35,8 @@ export const opportunityService = {
         industry: data.industry,
         businessType: data.businessType,
         investmentRange: data.investmentRange,
-        investmentMin: data.investmentMin,
-        investmentMax: data.investmentMax,
+        investmentMin: selectedRange?.min ?? 0,
+investmentMax: selectedRange?.max ?? 999999999,
         city: data.city,
         state: data.state,
         location: `${data.city}, ${data.state}`,
@@ -46,7 +50,7 @@ export const opportunityService = {
         contactPhone: data.contactPhone,
         postedBy: userId,
         postedByName: userName,
-        postedByImage: userImage,
+        postedByImage: userImage ?? '',
         status: 'pending',
         isFeatured: false,
         isUrgent: false,
