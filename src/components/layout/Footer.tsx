@@ -1,11 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import { CONTACT_INFO, SOCIAL_LINKS, NAV_LINKS } from '@/constants';
 
 export function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <footer className="bg-primary text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -19,7 +26,7 @@ export function Footer() {
               <span className="font-heading font-bold text-xl">THE CA CIRCUIT</span>
             </div>
             <p className="text-sm text-gray-300">
-              India's first professional networking platform exclusively built for Chartered Accountants.
+              India&apos;s first professional networking platform exclusively built for Chartered Accountants.
             </p>
             <div className="flex space-x-4">
               <Link href={SOCIAL_LINKS.linkedin} className="text-gray-300 hover:text-gold transition-colors">

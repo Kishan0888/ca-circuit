@@ -40,6 +40,10 @@ export function Navigation() {
     window.location.href = '/';
   };
 
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <motion.nav
       initial={{ y: -100 }}
