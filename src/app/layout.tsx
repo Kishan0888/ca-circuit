@@ -18,7 +18,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "THE CA CIRCUIT - Connect • Collaborate • Create Value",
+  title: "THE CA Connect - Connect • Collaborate • Create Value",
   description: "India's first professional networking platform exclusively built for Chartered Accountants. Share business opportunities, collaborate, and create value with the CA community.",
 };
 

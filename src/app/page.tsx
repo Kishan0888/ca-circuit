@@ -140,6 +140,27 @@ const earningSteps = [
             </div>
           </motion.div>
 
+{/* Introductory Video */}
+<motion.div
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.3 }}
+  className="mt-12 max-w-5xl mx-auto"
+>
+  <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-2xl bg-black">
+    <video
+  src="/The CA Connect.mp4"
+  autoPlay
+  loop
+  playsInline
+  controls
+  className="w-full h-full object-cover"
+>
+  Your browser does not support the video tag.
+</video>
+  </div>
+</motion.div>
+
           {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -546,7 +567,7 @@ const earningSteps = [
           >
             <h2 className="font-heading text-4xl md:text-5xl font-bold mb-6">Ready to Grow Your Network?</h2>
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Join thousands of Chartered Accountants already using THE CA CIRCUIT to discover and share business opportunities.
+              Join thousands of Chartered Accountants already using THE CA Connect to discover and share business opportunities.
             </p>
             <Link href="/register">
               <Button size="lg" className="bg-gold hover:bg-gold/90 text-white text-lg px-8">
@@ -576,7 +597,7 @@ const earningSteps = [
               {
                 name: 'Rajesh Kumar',
                 role: 'CA, Mumbai',
-                content: 'THE CA CIRCUIT helped me find the perfect partnership opportunity for my practice. The platform is professional and trustworthy.',
+                content: 'THE CA Connect helped me find the perfect partnership opportunity for my practice. The platform is professional and trustworthy.',
                 rating: 5,
               },
               {

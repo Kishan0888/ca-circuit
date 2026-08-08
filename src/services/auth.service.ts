@@ -81,37 +81,49 @@ export const authService = {
   },
 
   // Login with Google
-  async loginWithGoogle() {
-    try {
-      const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(auth, provider);
-      const user = userCredential.user;
+  // Login with Google
+async loginWithGoogle() {
+  try {
+    const provider = new GoogleAuthProvider();
 
-      // Check if user document exists
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
+    const userCredential = await signInWithPopup(auth, provider);
+    const user = userCredential.user;
 
-      if (!userDoc.exists()) {
-        // Create new user document
-        const userData: Partial<UserType> = {
-          id: user.uid,
-          email: user.email!,
-          name: user.displayName || '',
-          role: 'registered',
-          profileImage: user.photoURL || undefined,
-          isVerified: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
+    console.log('[AUTH] Google authentication successful:', user.uid);
 
-        await setDoc(doc(db, 'users', user.uid), userData);
-      }
+    // Check if user document already exists
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
 
-      return { success: true, user };
-    } catch (error: any) {
-      return { success: false, error: error.message };
+    if (!userDoc.exists()) {
+      // Create new Google user as registered user
+      const userData: UserType = {
+        id: user.uid,
+        email: user.email || '',
+        name: user.displayName || 'Google User',
+        role: 'registered',
+        isVerified: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        ...(user.photoURL ? { profileImage: user.photoURL } : {}),
+      };
+
+      await setDoc(userDocRef, userData);
+
+      console.log('[AUTH] Google user document created successfully.');
+    } else {
+      console.log('[AUTH] Google user document already exists.');
     }
-  },
 
+    return { success: true, user };
+  } catch (error: any) {
+    console.error('[AUTH] Google login failed:', error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+},
   // Logout user
   async logout() {
     try {

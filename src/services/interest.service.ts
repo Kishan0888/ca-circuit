@@ -16,24 +16,28 @@ import { Interest } from '@/types';
 
 export const interestService = {
   // Add interest
-  async addInterest(userId: string, opportunityId: string, message?: string) {
-    try {
-      const interestData: Partial<Interest> = {
-        userId,
-        opportunityId,
-        message,
-        status: 'pending',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+async addInterest(userId: string, opportunityId: string, message?: string) {
+  try {
+    const interestData: Partial<Interest> = {
+      userId,
+      opportunityId,
+      status: 'pending',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-      await addDoc(collection(db, 'interests'), interestData);
-      return { success: true };
-    } catch (error: any) {
-      return { success: false, error: error.message };
+    if (message !== undefined && message.trim() !== '') {
+      interestData.message = message.trim();
     }
-  },
 
+    await addDoc(collection(db, 'interests'), interestData);
+
+    return { success: true };
+  } catch (error: any) {
+    console.error('[INTEREST] Failed to create:', error);
+    return { success: false, error: error.message };
+  }
+},
   // Remove interest
   async removeInterest(userId: string, opportunityId: string) {
     try {
@@ -124,6 +128,29 @@ export const interestService = {
       return 0;
     }
   },
+
+// Get all interests (for admin)
+async getAllInterests(): Promise<Interest[]> {
+  try {
+    const q = query(
+      collection(db, 'interests')
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    return sortByCreatedAtDesc(
+      querySnapshot.docs.map(
+        doc => ({
+          id: doc.id,
+          ...doc.data(),
+        } as Interest)
+      )
+    );
+  } catch (error) {
+    console.error('Error fetching all interests:', error);
+    return [];
+  }
+},
 
   // Update interest status (for opportunity poster)
   async updateInterestStatus(interestId: string, status: 'accepted' | 'rejected') {

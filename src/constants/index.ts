@@ -188,6 +188,7 @@ export const NAV_LINKS = [
 export const ADMIN_NAV_LINKS = [
   { href: '/admin', label: 'Dashboard', icon: 'LayoutDashboard' },
   { href: '/admin/opportunities', label: 'Opportunities', icon: 'Briefcase' },
+  { href: '/admin/interests', label: 'Interests', icon: 'Heart' },
   { href: '/admin/users', label: 'Users', icon: 'Users' },
   { href: '/admin/analytics', label: 'Analytics', icon: 'BarChart3' },
 ] as const;
@@ -202,8 +203,7 @@ export const SOCIAL_LINKS = {
 
 // Contact Info
 export const CONTACT_INFO = {
-  email: 'hello@cacircuit.com',
-  phone: '+91 98765 43210',
+  email: 'support@cacircuit.com',
   address: 'Mumbai, Maharashtra, India',
 } as const;
 

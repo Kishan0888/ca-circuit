@@ -42,14 +42,14 @@ function DashboardContent() {
                 {userData.role === 'ca' ? 'Chartered Accountant' : 'Professional'} Dashboard
               </p>
             </div>
-            {userData.role === 'ca' && (
-              <Link href="/dashboard/create-opportunity">
-                <Button className="bg-gold hover:bg-gold/90 text-white">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create Opportunity
-                </Button>
-              </Link>
-            )}
+            {['ca', 'registered'].includes(userData.role) && (
+  <Link href="/dashboard/create-opportunity">
+    <Button className="bg-gold hover:bg-gold/90 text-white">
+      <Plus className="mr-2 h-4 w-4" />
+      Create Opportunity
+    </Button>
+  </Link>
+)}
           </div>
         </motion.div>
 
@@ -158,8 +158,8 @@ function DashboardContent() {
                     <CardDescription>Frequently used actions</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {userData.role === 'ca' && (
-                      <Link href="/dashboard/create-opportunity">
+{['ca', 'registered'].includes(userData.role) && (
+                        <Link href="/dashboard/create-opportunity">
                         <Button variant="outline" className="w-full justify-start">
                           <Plus className="mr-2 h-4 w-4" />
                           Create New Opportunity
@@ -236,7 +236,7 @@ function DashboardContent() {
                     <div className="text-center py-12">
                       <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                       <p className="text-muted-foreground mb-4">No opportunities yet</p>
-                      {userData.role === 'ca' && (
+                      {['ca', 'registered'].includes(userData.role) && (
                         <Link href="/dashboard/create-opportunity">
                           <Button className="bg-gold hover:bg-gold/90 text-white">
                             Create Your First Opportunity

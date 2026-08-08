@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Briefcase, Users, BarChart3, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, Briefcase,Heart, Users, BarChart3, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ADMIN_NAV_LINKS } from '@/constants';
 
 const ICONS: Record<string, typeof LayoutDashboard> = {
   LayoutDashboard,
   Briefcase,
+  Heart,
   Users,
   BarChart3,
 };
@@ -27,7 +28,7 @@ export function AdminSidebarContent({ onNavigate }: AdminSidebarProps) {
           <ShieldCheck className="h-5 w-5 text-sidebar-primary-foreground" />
         </div>
         <div>
-          <p className="font-heading font-bold text-sm leading-tight">CA CIRCUIT</p>
+          <p className="font-heading font-bold text-sm leading-tight">CA Connect</p>
           <p className="text-xs text-muted-foreground leading-tight">Admin Panel</p>
         </div>
       </div>

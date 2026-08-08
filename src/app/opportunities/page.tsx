@@ -2,11 +2,12 @@
 
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Search, Filter, SlidersHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -243,65 +244,247 @@ function OpportunitiesContent() {
           </p>
         </motion.div>
 
-        {/* Opportunities Grid */}
-        {loading ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Loading opportunities...</p>
-          </div>
-        ) : opportunities.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground mb-4">No opportunities found matching your criteria.</p>
-            <Button onClick={clearFilters} variant="outline">
-              Clear Filters
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Opportunities Table / Mobile Cards */}
+{loading ? (
+  <Card>
+    <CardContent className="p-0">
+      <div className="hidden md:block">
+        <div className="p-4 space-y-4">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div key={index} className="h-14 bg-muted rounded animate-pulse" />
+          ))}
+        </div>
+      </div>
+
+      <div className="md:hidden p-4 space-y-3">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="h-32 bg-muted rounded animate-pulse" />
+        ))}
+      </div>
+    </CardContent>
+  </Card>
+) : opportunities.length === 0 ? (
+  <div className="text-center py-12">
+    <p className="text-muted-foreground mb-4">
+      No opportunities found matching your criteria.
+    </p>
+
+    <Button onClick={clearFilters} variant="outline">
+      Clear Filters
+    </Button>
+  </div>
+) : (
+  <Card className="overflow-hidden">
+    <CardContent className="p-0">
+
+      {/* ================= DESKTOP TABLE ================= */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b bg-muted/40">
+              <th className="text-left font-semibold px-5 py-4 min-w-[280px]">
+                Opportunity
+              </th>
+
+              <th className="text-left font-semibold px-4 py-4 whitespace-nowrap">
+                Type
+              </th>
+
+              <th className="text-left font-semibold px-4 py-4 whitespace-nowrap">
+                Category / Industry
+              </th>
+
+              <th className="text-left font-semibold px-4 py-4 whitespace-nowrap">
+                Location
+              </th>
+
+              <th className="text-left font-semibold px-4 py-4 whitespace-nowrap">
+                Investment
+              </th>
+
+              <th className="text-right font-semibold px-5 py-4">
+                Action
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
             {opportunities.map((opportunity, index) => (
-              <motion.div
+              <motion.tr
                 key={opportunity.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.03 }}
+                className="border-b last:border-b-0 hover:bg-muted/30 transition-colors"
               >
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                  {opportunity.images.length > 0 && (
-                    <div className="h-48 bg-gradient-to-br from-primary/10 to-secondary/20 rounded-t-lg" />
-                  )}
-                  <CardHeader>
-                    <div className="flex justify-between items-start mb-2">
-                      <Badge variant="secondary">{opportunity.category}</Badge>
-                      {opportunity.isFeatured && <Badge className="bg-gold text-white">Featured</Badge>}
-                      {opportunity.isUrgent && <Badge variant="destructive">Urgent</Badge>}
+                {/* Opportunity */}
+                <td className="px-5 py-4">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-semibold text-heading">
+                        {opportunity.title}
+                      </span>
+
+                      {opportunity.isFeatured && (
+                        <Badge className="bg-gold text-white text-[10px]">
+                          Featured
+                        </Badge>
+                      )}
+
+                      {opportunity.isUrgent && (
+                        <Badge variant="destructive" className="text-[10px]">
+                          Urgent
+                        </Badge>
+                      )}
                     </div>
-                    <CardTitle className="text-xl line-clamp-2">{opportunity.title}</CardTitle>
-                    <CardDescription className="line-clamp-2">{opportunity.shortDescription}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Industry</span>
-                        <span className="font-medium">{opportunity.industry}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Location</span>
-                        <span className="font-medium">{opportunity.city}, {opportunity.state}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Investment</span>
-                        <span className="font-medium">{opportunity.investmentRange}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm pt-3 border-t">
-                        <span className="text-muted-foreground">Posted by</span>
-                        <span className="font-medium">{opportunity.postedByName}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2 max-w-[360px]">
+                      {opportunity.shortDescription}
+                    </p>
+                  </div>
+                </td>
+
+                {/* Type */}
+                <td className="px-4 py-4 whitespace-nowrap">
+                  <Badge variant="outline" className="capitalize">
+  {opportunity.businessType
+    ? opportunity.businessType.replace(/-/g, ' ')
+    : 'Not Mentioned'}
+</Badge>
+                </td>
+
+                {/* Category / Industry */}
+                <td className="px-4 py-4">
+                  <div>
+                    <p className="font-medium">
+                      {opportunity.category}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {opportunity.industry}
+                    </p>
+                  </div>
+                </td>
+
+                {/* Location */}
+                <td className="px-4 py-4 whitespace-nowrap">
+                  <p className="font-medium">
+                    {opportunity.city}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {opportunity.state}
+                  </p>
+                </td>
+
+                {/* Investment */}
+                <td className="px-4 py-4 whitespace-nowrap">
+                  <span className="font-semibold text-gold">
+                    {opportunity.investmentRange}
+                  </span>
+                </td>
+
+                {/* Action */}
+                <td className="px-5 py-4 text-right">
+                  <Link
+  href={`/opportunities/${opportunity.id}`}
+  className="inline-flex items-center justify-center rounded-md bg-gold px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-gold/90"
+>
+  View Details
+</Link>
+                </td>
+              </motion.tr>
             ))}
-          </div>
-        )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ================= MOBILE VIEW ================= */}
+      <div className="md:hidden divide-y">
+        {opportunities.map((opportunity, index) => (
+          <motion.div
+            key={opportunity.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.03 }}
+            className="p-4"
+          >
+            <div className="space-y-3">
+
+              {/* Title + badges */}
+              <div>
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="font-semibold text-base leading-snug text-heading">
+                    {opportunity.title}
+                  </h3>
+
+                  {opportunity.isFeatured && (
+                    <Badge className="bg-gold text-white text-[10px] shrink-0">
+                      Featured
+                    </Badge>
+                  )}
+                </div>
+
+                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                  {opportunity.shortDescription}
+                </p>
+              </div>
+
+              {/* Meta */}
+              <div className="grid grid-cols-2 gap-3 text-sm">
+
+                <div>
+                  <p className="text-xs text-muted-foreground">
+                    Type
+                  </p>
+                  <p className="font-medium capitalize">
+                    {opportunity.businessType.replace('-', ' ')}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs text-muted-foreground">
+                    Category
+                  </p>
+                  <p className="font-medium truncate">
+                    {opportunity.category}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs text-muted-foreground">
+                    Location
+                  </p>
+                  <p className="font-medium">
+                    {opportunity.city}, {opportunity.state}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs text-muted-foreground">
+                    Investment
+                  </p>
+                  <p className="font-semibold text-gold">
+                    {opportunity.investmentRange}
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Action */}
+              <Link
+  href={`/opportunities/${opportunity.id}`}
+  className="flex w-full items-center justify-center rounded-md bg-gold px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gold/90"
+>
+  View Opportunity
+</Link>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+    </CardContent>
+  </Card>
+)}
+        
       </div>
     </div>
   );

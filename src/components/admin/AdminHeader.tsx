@@ -63,17 +63,19 @@ export function AdminHeader({ title, description }: AdminHeaderProps) {
         </div>
 
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="ghost" className="flex items-center gap-2 px-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={userData?.profileImage} alt={userData?.name} />
-                <AvatarFallback>{initials}</AvatarFallback>
-              </Avatar>
-              <span className="hidden sm:block text-sm font-medium max-w-[140px] truncate">
-                {userData?.name || 'Admin'}
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
+           <DropdownMenuTrigger className="flex items-center gap-2 px-2">
+  <Avatar className="h-8 w-8">
+    <AvatarImage
+      src={userData?.profileImage}
+      alt={userData?.name}
+    />
+    <AvatarFallback>{initials}</AvatarFallback>
+  </Avatar>
+
+  <span className="hidden sm:block text-sm font-medium max-w-[140px] truncate">
+    {userData?.name || 'Admin'}
+  </span>
+</DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <Link href="/dashboard" className="flex items-center w-full">

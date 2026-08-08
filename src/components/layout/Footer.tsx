@@ -21,12 +21,14 @@ export function Footer() {
           <div className="space-y-4">
             <Link href="/" className="inline-block">
   <Image
-    src="/logo.png"
-    alt="CA Connect"
-    width={220}
-    height={55}
-    className="h-11 w-auto"
-  />
+  src="/logo.png"
+  alt="CA Connect"
+  width={100}
+  height={10}
+  priority
+  unoptimized
+  className="..."
+/>
 </Link>
             <p className="text-sm text-gray-300">
   India&apos;s professional networking platform built for Chartered Accountants to connect, collaborate, and discover business opportunities.
@@ -109,15 +111,7 @@ export function Footer() {
                   {CONTACT_INFO.email}
                 </a>
               </li>
-              <li className="flex items-start space-x-3">
-                <Phone className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
-                <a
-                  href={`tel:${CONTACT_INFO.phone}`}
-                  className="text-sm text-gray-300 hover:text-gold transition-colors"
-                >
-                  {CONTACT_INFO.phone}
-                </a>
-              </li>
+              
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
                 <span className="text-sm text-gray-300">{CONTACT_INFO.address}</span>
@@ -129,7 +123,7 @@ export function Footer() {
         <div className="border-t border-gray-700 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} THE CA CIRCUIT. All rights reserved.
+              © {new Date().getFullYear()} THE CA Connect. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link href="/privacy" className="text-sm text-gray-400 hover:text-gold transition-colors">

@@ -50,20 +50,37 @@ export default function OpportunityDetailsPage() {
   };
 
   const handleInterest = async () => {
-    if (!user) {
-      setShowLoginDialog(true);
-      return;
-    }
+  if (!user) {
+    setShowLoginDialog(true);
+    return;
+  }
 
+  if (!opportunity) return;
+
+  try {
     if (hasInterest) {
-      await interestService.removeInterest(user.uid, opportunity!.id);
-      await opportunityService.decrementInterestedCount(opportunity!.id);
+      const result = await interestService.removeInterest(
+        user.uid,
+        opportunity.id
+      );
+
+      if (result.success) {
+        setHasInterest(false);
+      }
     } else {
-      await interestService.addInterest(user.uid, opportunity!.id);
-      await opportunityService.incrementInterestedCount(opportunity!.id);
+      const result = await interestService.addInterest(
+        user.uid,
+        opportunity.id
+      );
+
+      if (result.success) {
+        setHasInterest(true);
+      }
     }
-    setHasInterest(!hasInterest);
-  };
+  } catch (error) {
+    console.error('[INTEREST] Error:', error);
+  }
+};
 
   const getInvestmentLabel = (range: string) => {
     const found = INVESTMENT_RANGES.find(r => r.value === range);
@@ -320,24 +337,15 @@ export default function OpportunityDetailsPage() {
                     </div>
                   ) : (
                     <>
-                      {opportunity.contactPreference === 'email' || opportunity.contactPreference === 'both' ? (
-                        <div className="flex items-center gap-3">
-                          <Mail className="h-5 w-5 text-muted-foreground" />
-                          <div>
-                            <p className="text-sm text-muted-foreground">Email</p>
-                            <p className="font-medium">{opportunity.contactEmail || 'Contact for details'}</p>
-                          </div>
-                        </div>
-                      ) : null}
-                      {opportunity.contactPreference === 'phone' || opportunity.contactPreference === 'both' ? (
-                        <div className="flex items-center gap-3">
-                          <Phone className="h-5 w-5 text-muted-foreground" />
-                          <div>
-                            <p className="text-sm text-muted-foreground">Phone</p>
-                            <p className="font-medium">{opportunity.contactPhone || 'Contact for details'}</p>
-                          </div>
-                        </div>
-                      ) : null}
+                      <div className="rounded-lg border bg-muted/30 p-4">
+  <p className="text-sm font-medium">
+    Contact details are not publicly displayed.
+  </p>
+  <p className="text-sm text-muted-foreground mt-1">
+    If you are interested in this opportunity, click below and our team will
+    help you connect with the opportunity owner.
+  </p>
+</div>
                       <Button className="w-full bg-gold hover:bg-gold/90 text-white">
                         Send Message
                       </Button>

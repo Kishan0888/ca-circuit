@@ -4,7 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Search, User, LogOut, Bell, Bookmark } from 'lucide-react';
+import {
+  Menu,
+  X,
+  Search,
+  LogOut,
+  Bell,
+  Upload,
+  Compass,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -63,10 +71,11 @@ export function Navigation() {
   <Image
   src="/logo.png"
   alt="CA Connect"
-  width={280}
+  width={180}
   height={70}
   priority
-  className="h-14 w-auto transition-all duration-300"
+  unoptimized
+  className="h-12 w-auto object-contain transition-all duration-300"
 />
 </Link>
 
@@ -99,6 +108,27 @@ export function Navigation() {
                 <Search className="h-5 w-5" />
               </Button>
             </Link>
+
+            {/* Opportunity Actions */}
+<div className="hidden lg:flex items-center gap-2">
+  
+
+  {user ? (
+    <Link href="/dashboard/create-opportunity">
+      <Button className="rounded-full bg-gold hover:bg-[#b8860b] text-white">
+        <Upload className="mr-2 h-4 w-4" />
+        Import Opportunity
+      </Button>
+    </Link>
+  ) : (
+    <Link href="/login?redirect=/dashboard/create-opportunity">
+      <Button className="rounded-full bg-gold hover:bg-[#b8860b] text-white">
+        <Upload className="mr-2 h-4 w-4" />
+        Import Opportunity
+      </Button>
+    </Link>
+  )}
+</div>
 
             {user && userData ? (
               <>
@@ -140,15 +170,8 @@ export function Navigation() {
                     <DropdownMenuItem>
                       <Link href="/dashboard">Dashboard</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link href="/dashboard/profile">Profile</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link href="/dashboard/bookmarks">
-                        <Bookmark className="mr-2 h-4 w-4" />
-                        Bookmarks
-                      </Link>
-                    </DropdownMenuItem>
+        
+                    
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
@@ -182,49 +205,93 @@ export function Navigation() {
       </div>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border bg-background"
+<AnimatePresence>
+  {isMobileMenuOpen && (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: 'auto' }}
+      exit={{ opacity: 0, height: 0 }}
+      className="md:hidden border-t border-border bg-background"
+    >
+      <div className="px-4 py-4 space-y-3">
+
+        {/* Main Navigation */}
+        {NAV_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`block py-2 text-sm font-medium transition-colors hover:text-primary ${
+              pathname === link.href
+                ? 'text-primary'
+                : 'text-foreground'
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
           >
-            <div className="px-4 py-4 space-y-3">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`block py-2 text-sm font-medium transition-colors hover:text-primary ${
-                    pathname === link.href ? 'text-primary' : 'text-foreground'
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              {!user && (
-                <>
-                  <Link
-                    href="/login"
-                    className="block py-2 text-sm font-medium"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="block py-2 text-sm font-medium text-gold"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Join Now
-                  </Link>
-                </>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {link.label}
+          </Link>
+        ))}
+
+        {/* Mobile Action Buttons */}
+        <div className="pt-2 space-y-2 border-t border-border">
+
+          {/* Explore Opportunities */}
+          <Link
+            href="/opportunities"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="block"
+          >
+            <Button
+              variant="outline"
+              className="w-full justify-center rounded-full border-gold text-gold hover:bg-gold/10"
+            >
+              Explore Opportunities
+            </Button>
+          </Link>
+
+          {/* Submit / Import Opportunity */}
+          <Link
+            href={
+              user
+                ? "/dashboard/create-opportunity"
+                : "/login?redirect=/dashboard/create-opportunity"
+            }
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="block"
+          >
+            <Button
+              className="w-full justify-center rounded-full bg-gold hover:bg-[#b8860b] text-white"
+            >
+              Import Opportunity
+            </Button>
+          </Link>
+
+        </div>
+
+        {/* Authentication */}
+        {!user ? (
+          <div className="pt-2 border-t border-border space-y-1">
+            <Link
+              href="/login"
+              className="block py-2 text-sm font-medium"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Login
+            </Link>
+
+            <Link
+              href="/register"
+              className="block py-2 text-sm font-medium text-gold"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Join Now
+            </Link>
+          </div>
+        ) : null}
+
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
     </motion.nav>
   );
 }

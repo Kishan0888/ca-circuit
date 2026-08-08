@@ -11,11 +11,11 @@ export default function FAQPage() {
 
   const faqs = [
     {
-      question: 'What is THE CA CIRCUIT?',
-      answer: 'THE CA CIRCUIT is India\'s first professional networking platform exclusively built for Chartered Accountants. It\'s a place where CAs can discover business opportunities, form partnerships, and connect with fellow professionals in a trusted environment.',
+      question: 'What is THE CA Connect?',
+      answer: 'THE CA Connect is India\'s first professional networking platform exclusively built for Chartered Accountants. It\'s a place where CAs can discover business opportunities, form partnerships, and connect with fellow professionals in a trusted environment.',
     },
     {
-      question: 'Who can join THE CA CIRCUIT?',
+      question: 'Who can join THE CA Connect?',
       answer: 'Chartered Accountants with valid credentials can join as CA members. Professionals, investors, and businesses interested in connecting with CAs can also join as registered users. All CA profiles are verified for authenticity.',
     },
     {
@@ -90,7 +90,7 @@ export default function FAQPage() {
           </div>
           <h1 className="font-heading text-5xl font-bold text-heading mb-4">Frequently Asked Questions</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Find answers to common questions about THE CA CIRCUIT. Can't find what you're looking for? Contact our support team.
+            Find answers to common questions about THE CA Connect. Can't find what you're looking for? Contact our support team.
           </p>
         </motion.div>
 

@@ -16,7 +16,7 @@ export default function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="font-heading text-5xl font-bold text-heading mb-4">About THE CA CIRCUIT</h1>
+          <h1 className="font-heading text-5xl font-bold text-heading mb-4">About THE CA Connect</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             India's first professional networking platform exclusively built for Chartered Accountants to connect, collaborate, and create value together.
           </p>
@@ -121,13 +121,13 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="prose max-w-none">
               <p className="text-muted-foreground leading-relaxed mb-4">
-                THE CA CIRCUIT was born from a simple observation: while Chartered Accountants are among the most respected professionals in India, there was no dedicated platform for them to connect and explore business opportunities together.
+                THE CA Connect was born from a simple observation: while Chartered Accountants are among the most respected professionals in India, there was no dedicated platform for them to connect and explore business opportunities together.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Founded by a team of CAs and tech enthusiasts, we understood the unique challenges faced by Chartered Accountants in finding the right partners, investors, or opportunities. Traditional networking platforms were too generic, and industry-specific options were limited.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                We built THE CA CIRCUIT to bridge this gap - a platform that understands the CA profession, speaks their language, and provides the tools they need to grow their practices, explore new ventures, and build lasting professional relationships.
+                We built THE CA Connect to bridge this gap - a platform that understands the CA profession, speaks their language, and provides the tools they need to grow their practices, explore new ventures, and build lasting professional relationships.
               </p>
             </CardContent>
           </Card>
