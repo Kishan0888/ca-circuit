@@ -101,6 +101,28 @@ const earningSteps = [
   <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-primary/10 blur-[120px]" />
        
    <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+     {/* Introductory Video */}
+<motion.div
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.3 }}
+  className="mt-12 max-w-5xl mx-auto"
+>
+  <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-2xl bg-black">
+    <video
+  src="/The CA Connect.mp4"
+  autoPlay
+  loop
+  playsInline
+  controls
+  className="w-full h-full object-cover"
+>
+  Your browser does not support the video tag.
+</video>
+  </div>
+</motion.div>
+
     
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -140,26 +162,6 @@ const earningSteps = [
             </div>
           </motion.div>
 
-{/* Introductory Video */}
-<motion.div
-  initial={{ opacity: 0, y: 30 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8, delay: 0.3 }}
-  className="mt-12 max-w-5xl mx-auto"
->
-  <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-2xl bg-black">
-    <video
-  src="/The CA Connect.mp4"
-  autoPlay
-  loop
-  playsInline
-  controls
-  className="w-full h-full object-cover"
->
-  Your browser does not support the video tag.
-</video>
-  </div>
-</motion.div>
 
           {/* Stats */}
           <motion.div
