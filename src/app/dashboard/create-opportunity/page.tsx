@@ -32,7 +32,7 @@ export default function CreateOpportunityPage() {
     shortDescription: '',
     description: '',
     requirements: '',
-    contactPreference: 'email' as 'email' | 'phone' | 'both',
+    contactPreference: 'both' as 'email' | 'phone' | 'both',
     contactEmail: '',
     contactPhone: '',
     isUrgent: false,
@@ -348,52 +348,53 @@ export default function CreateOpportunityPage() {
                 </div>
 
                 {/* Contact Information */}
-                <div className="space-y-4 pt-4 border-t">
-                  <h3 className="font-heading text-lg font-semibold">Contact Information</h3>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="contactPreference">Contact Preference *</Label>
-                    <Select value={formData.contactPreference} onValueChange={(value: any) => handleInputChange('contactPreference', value)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="email">Email Only</SelectItem>
-                        <SelectItem value="phone">Phone Only</SelectItem>
-                        <SelectItem value="both">Both Email and Phone</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+<div className="space-y-4 pt-4 border-t">
+  <h3 className="font-heading text-lg font-semibold">
+    Contact Information
+  </h3>
 
-                  {(formData.contactPreference === 'email' || formData.contactPreference === 'both') && (
-                    <div className="space-y-2">
-                      <Label htmlFor="contactEmail">Email *</Label>
-                      <Input
-                        id="contactEmail"
-                        type="email"
-                        placeholder="your@email.com"
-                        value={formData.contactEmail}
-                        onChange={(e) => handleInputChange('contactEmail', e.target.value)}
-                        required
-                      />
-                    </div>
-                  )}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                  {(formData.contactPreference === 'phone' || formData.contactPreference === 'both') && (
-                    <div className="space-y-2">
-                      <Label htmlFor="contactPhone">Phone *</Label>
-                      <Input
-                        id="contactPhone"
-                        type="tel"
-                        placeholder="+91 98765 43210"
-                        value={formData.contactPhone}
-                        onChange={(e) => handleInputChange('contactPhone', e.target.value)}
-                        required
-                      />
-                    </div>
-                  )}
-                </div>
+    {/* Email */}
+    <div className="space-y-2">
+      <Label htmlFor="contactEmail">
+        Email <span className="text-red-500">*</span>
+      </Label>
 
+      <Input
+        id="contactEmail"
+        type="email"
+        placeholder="your@email.com"
+        value={formData.contactEmail}
+        onChange={(e) =>
+          handleInputChange('contactEmail', e.target.value)
+        }
+        required
+        pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+      />
+    </div>
+
+    {/* Phone */}
+    <div className="space-y-2">
+      <Label htmlFor="contactPhone">
+        Phone <span className="text-red-500">*</span>
+      </Label>
+
+      <Input
+        id="contactPhone"
+        type="tel"
+        placeholder="+91 98765 43210"
+        value={formData.contactPhone}
+        onChange={(e) =>
+          handleInputChange('contactPhone', e.target.value)
+        }
+        required
+        pattern="^\+?[0-9\s-]{10,15}$"
+      />
+    </div>
+
+  </div>
+</div>
                 {/* Images */}
                 <div className="space-y-4 pt-4 border-t">
                   <h3 className="font-heading text-lg font-semibold">Images (Optional)</h3>
