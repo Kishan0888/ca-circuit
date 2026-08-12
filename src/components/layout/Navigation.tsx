@@ -75,7 +75,7 @@ export function Navigation() {
   height={70}
   priority
   unoptimized
-  className="h-12 w-auto object-contain transition-all duration-300"
+  className="h-16 w-auto object-contain transition-all duration-300"
 />
 </Link>
 
