@@ -117,14 +117,14 @@ export function Navigation() {
     <Link href="/dashboard/create-opportunity">
       <Button className="rounded-full bg-gold hover:bg-[#b8860b] text-white">
         <Upload className="mr-2 h-4 w-4" />
-        Import Opportunity
+        Share Opportunity
       </Button>
     </Link>
   ) : (
     <Link href="/login?redirect=/dashboard/create-opportunity">
       <Button className="rounded-full bg-gold hover:bg-[#b8860b] text-white">
         <Upload className="mr-2 h-4 w-4" />
-        Import Opportunity
+        Share Opportunity
       </Button>
     </Link>
   )}
@@ -261,7 +261,7 @@ export function Navigation() {
             <Button
               className="w-full justify-center rounded-full bg-gold hover:bg-[#b8860b] text-white"
             >
-              Import Opportunity
+              Share Opportunity
             </Button>
           </Link>
 
