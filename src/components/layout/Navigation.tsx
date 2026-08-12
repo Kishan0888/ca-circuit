@@ -186,7 +186,7 @@ export function Navigation() {
                   <Button variant="ghost">Login</Button>
                 </Link>
                 <Link href="/register">
-                  <Button className="rounded-full bg-gold hover:bg-[#b8860b] text-white px-6 shadow-lg hover:shadow-xl transition-all duration-300">Join Now</Button>
+                  <Button className="rounded-full bg-gold hover:bg-[#b8860b] text-white px-6 shadow-lg hover:shadow-xl transition-all duration-300">Join Network</Button>
                 </Link>
               </div>
             )}
@@ -283,7 +283,7 @@ export function Navigation() {
               className="block py-2 text-sm font-medium text-gold"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Join Now
+              Join Network
             </Link>
           </div>
         ) : null}
