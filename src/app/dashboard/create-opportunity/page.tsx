@@ -183,7 +183,7 @@ export default function CreateOpportunityPage() {
               Back to Dashboard
             </Button>
           </Link>
-          <h1 className="font-heading text-4xl font-bold text-heading mb-2">Create Opportunity</h1>
+          <h1 className="font-heading text-4xl font-bold text-heading mb-2">Share Opportunity</h1>
           <p className="text-muted-foreground">Share a business opportunity with the CA community</p>
         </motion.div>
 
