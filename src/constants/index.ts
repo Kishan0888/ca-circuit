@@ -203,7 +203,7 @@ export const SOCIAL_LINKS = {
 
 // Contact Info
 export const CONTACT_INFO = {
-  email: 'support@caconnect.com',
+  email: 'support@thecaconnect.com',
   address: '252/1 Shahpurjat, Delhi, 110049, India',
 } as const;
 
