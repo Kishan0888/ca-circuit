@@ -111,6 +111,17 @@ export function Footer() {
                   {CONTACT_INFO.email}
                 </a>
               </li>
+
+               {/* Phone - ye naya add karo */}
+    <li className="flex items-start space-x-3">
+      <Phone className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+      <a
+        href={`tel:${CONTACT_INFO.phone}`}
+        className="text-sm text-gray-300 hover:text-gold transition-colors"
+      >
+        {CONTACT_INFO.phone}
+      </a>
+    </li>
               
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
