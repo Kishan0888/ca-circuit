@@ -73,7 +73,20 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-               
+               <div className="flex items-start gap-4">
+  <div className="p-3 bg-gold/10 rounded-lg">
+    <Phone className="h-5 w-5 text-gold" />
+  </div>
+  <div>
+    <h3 className="font-semibold">Phone</h3>
+    <a
+      href={`tel:${CONTACT_INFO.phone}`}
+      className="text-muted-foreground hover:text-gold transition-colors"
+    >
+      {CONTACT_INFO.phone}
+    </a>
+  </div>
+</div>
 
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
