@@ -164,7 +164,7 @@ const earningSteps = [
 
 
           {/* Stats */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -188,7 +188,7 @@ const earningSteps = [
             </div>
           </motion.div>
         </div>
-      </section>
+      </section> */}
       {/* What the Network Does */}
 <section className="py-24 bg-background">
   <div className="container mx-auto px-4 sm:px-6 lg:px-8">
