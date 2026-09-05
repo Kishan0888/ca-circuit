@@ -203,9 +203,9 @@ export const SOCIAL_LINKS = {
 
 // Contact Info
 export const CONTACT_INFO = {
-  phone: "+91 99581 80214",
+  phone: "+91 93195 61278",
   email: 'support@thecaconnect.com',
-  address: '252/1 Shahpurjat, Delhi, 110049, India',
+  address: '253 Third Floor Shahpur jat, Delhi - 110049',
 } as const;
 
 // Animation Variants
