@@ -200,7 +200,7 @@ const earningSteps = [
       className="text-center mb-16"
     >
       <h2 className="font-heading text-4xl md:text-5xl font-bold text-heading">
-        What the <span className="text-gold">Network Does</span>
+        What the <span className="text-gold">Network Offers</span>
       </h2>
 
       <p className="mt-5 max-w-3xl mx-auto text-lg text-muted-foreground">
@@ -508,7 +508,7 @@ const earningSteps = [
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-background">
+      {/* <section className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -557,7 +557,7 @@ const earningSteps = [
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Membership CTA */}
       <section className="py-20 bg-primary text-white">
@@ -582,7 +582,7 @@ const earningSteps = [
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-background">
+      {/* <section className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -592,9 +592,9 @@ const earningSteps = [
           >
             <h2 className="font-heading text-4xl font-bold text-heading mb-4">What Our Members Say</h2>
             <p className="text-lg text-muted-foreground">Success stories from our community</p>
-          </motion.div>
+          </motion.div> */}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 name: 'Rajesh Kumar',
@@ -640,7 +640,7 @@ const earningSteps = [
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
